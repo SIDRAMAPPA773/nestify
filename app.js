@@ -6,7 +6,7 @@ const Listing = require('./models/listing.js');
 const path = require('path');
 const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
-
+const wrapAsync= require("./utils/wrapAsync.js");
 
 
 app.set('view engine', 'ejs');
@@ -87,17 +87,14 @@ app.get('/listings/:id', async (req, res) => {
 });
 
 
-app.post('/listings/new', async (req, res) => {
-  try {
+app.post('/listings/new', wrapAsync(async (req, res) => {
     
     const newListing = new Listing(req.body.listing);
     await newListing.save();
     res.redirect('/listings');
-  } catch (err) {
-    console.error(err);
-    res.status(500).send('Server Error');
+  
   }
-});
+));
 
 
 app.put('/listings/:id', async (req, res) => {
@@ -122,3 +119,8 @@ app.delete('/listings/:id', async (req, res) => {
     res.status(500).send('Server Error');
   }
 });
+
+
+app.use((err,req,res,next)=>{
+  res.status(500).message("something went wrong !!!!!");
+})
