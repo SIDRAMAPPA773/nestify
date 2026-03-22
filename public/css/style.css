@@ -62,7 +62,7 @@ body{
 }
 
 /* cards */
-.card{
+.listing-card{
     border: none !important;
     margin-bottom: 2rem;
 
@@ -174,4 +174,24 @@ body{
 }
 .show-btns .show-edit-btn, .show-btns .show-delete-btn{
     margin: 0 10px;
+}
+
+
+
+
+.animated-line {
+  height: 3px;
+  border: none;
+  background: linear-gradient(90deg, transparent, black, transparent);
+  background-size: 200% 100%;
+  animation: moveLine 2s linear infinite;
+}
+
+@keyframes moveLine {
+  0% {
+    background-position: -100% 0;
+  }
+  100% {
+    background-position: 100% 0;
+  }
 }

@@ -10,7 +10,11 @@ const methodOverride = require('method-override');
 const ejsMate = require("ejs-mate");
 const wrapAsync= require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js")
-const listingSchema=require("./schema.js");
+const {listingSchema,reviewSchema}=require("./schema.js");
+
+
+const Review=require('./models/review.js');
+
 app.set('view engine', 'ejs');
 app.set('views', path.join(__dirname, 'views'));
 app.use(express.urlencoded({ extended: true }));
@@ -28,16 +32,37 @@ async function main() {
 
 
 const validateListing = (req, res, next) => {
-  const { error } = listingSchema.validate(req.body);
-
-  if (error) {
-    const msg = error.details.map(el => el.message).join(",");
-    throw new ExpressError(400, msg);
-  }else{
-    next();
+  console.log("BODY:", req.body);   
+  if (!req.body.listing) {
+    throw new ExpressError(400, "Listing is required");
   }
 
-  
+  const { error } = listingSchema.validate(req.body.listing);
+
+  if (error) {
+    console.log("JOI ERROR:", error.details); 
+    const msg = error.details.map(el => el.message).join(",");
+    throw new ExpressError(400, msg);
+  }
+
+  next();
+};
+const validateReview = (req, res, next) => {
+  console.log("BODY:", req.body);  
+
+  if (!req.body.review) {
+    throw new ExpressError(400, "Listing is required");
+  }
+
+  const { error } = reviewSchema.validate(req.body);
+
+  if (error) {
+    console.log("JOI ERROR:", error.details); // 👈 THIS
+    const msg = error.details.map(el => el.message).join(",");
+    throw new ExpressError(400, msg);
+  }
+
+  next();
 };
 // main().catch(err => console.log(err));
 
@@ -85,7 +110,7 @@ app.get('/listings/:id/edit', wrapAsync(async (req, res) => {
 app.get('/listings/:id', wrapAsync(async (req, res) => {
  
     const { id } = req.params;
-    const listing = await Listing.findById(id);
+    const listing = await Listing.findById(id).populate("reviews");
     if (!listing) {
       return res.status(404).send('Listing not found');
     }
@@ -122,6 +147,32 @@ app.post('/listings/new',validateListing, wrapAsync(async (req, res) => {
 ));
 
 
+app.post('/listings/:id/reviews',validateReview,wrapAsync(async (req,res)=>{
+
+let listing=await Listing.findById(req.params.id);
+let newReview=new Review(req.body.review);
+
+
+listing.reviews.push(newReview);
+ await newReview.save();
+ await listing.save();
+
+console.log("new review saved");
+res.redirect(`/listings/${listing._id}`);
+}));
+
+
+
+// delete review route
+app.delete("/listings/:id/reviews/:reviewId",wrapAsync(async (req,res)=>{
+let {id,reviewId}=req.params;
+ await Review.findByIdAndDelete(reviewId);
+ await Listing.findByIdAndUpdate(id, {
+    $pull: { reviews: reviewId }
+  });
+ res.redirect(`/listings/${id}`);
+}));
+
 app.put('/listings/:id',validateListing,wrapAsync( async (req, res) => {
  
     const { id } = req.params;
@@ -134,9 +185,19 @@ app.put('/listings/:id',validateListing,wrapAsync( async (req, res) => {
  
 }));
 
+//delete listing
 app.delete('/listings/:id', wrapAsync(async (req, res) => {
   
     const { id } = req.params;
+    const listing=await Listing.findById(id);
+  
+
+  // delete all reviews linked to this listing
+  await Review.deleteMany({
+    _id: { $in: listing.reviews }
+  });
+
+
     await Listing.findByIdAndDelete(id);
     res.redirect('/listings');
  
