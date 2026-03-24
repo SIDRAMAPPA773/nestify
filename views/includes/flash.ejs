@@ -1,0 +1,25 @@
+<% if (success && success.length > 0) { %>
+    <div class="flash-msg success"><%= success %></div>
+<% } %>
+
+<% if (error && error.length > 0) { %>
+    <div class="flash-msg error"><%= error %></div>
+<% } %>
+
+<script>
+    const messages = document.querySelectorAll(".flash-msg");
+
+    messages.forEach(msg => {
+        // show animation
+        setTimeout(() => {
+            msg.classList.add("show");
+        }, 100);
+
+        // auto hide
+        setTimeout(() => {
+            msg.classList.remove("show");
+            setTimeout(() => msg.remove(), 400);
+        }, 3000);
+    });
+    
+</script>

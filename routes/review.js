@@ -43,6 +43,7 @@ listing.reviews.push(newReview);
  await listing.save();
 
 console.log("new review saved");
+req.flash("success", "New Review Created !");
 res.redirect(`/listings/${listing._id}`);
 }));
 
@@ -53,6 +54,7 @@ let {id,reviewId}=req.params;
  await Listing.findByIdAndUpdate(id, {
     $pull: { reviews: reviewId }
   });
+  req.flash("success", " Review Deleted SuccessFully !");
  res.redirect(`/listings/${id}`);
 }));
 

@@ -11,6 +11,8 @@ const ejsMate = require("ejs-mate");
 // const wrapAsync= require("./utils/wrapAsync.js");
 const ExpressError=require("./utils/ExpressError.js")
 // const {listingSchema,reviewSchema}=require("./schema.js");
+const session=require("express-session");
+const flash=require('connect-flash');
 
 
 const Review=require('./models/review.js');
@@ -35,13 +37,35 @@ async function main() {
 
 // main().catch(err => console.log(err));
 
+const sessionOptions={
+  secret:"mysupersecretcode",
+  resave:false,
+  saveUninitialized:true,
+  cookie:{
+    expires:Date.now()+7*24*60*60*1000,
+    maxAge:7*24*60*60*1000,
+    httpOnly:true
+  }
+};
+
+
 app.get('/', (req, res) => {
   res.send('Hi I am ROOT');
 });
 
-app.listen(port, () => {
-  console.log(`Server is running on http://localhost:${port}`);
-});
+app.use(session(sessionOptions));
+app.use(flash());
+
+app.use((req,res,next)=>{
+  
+    const successMsg = req.flash("success")[0];
+    const errorMsg = req.flash("error")[0];
+
+    res.locals.success = successMsg && successMsg.trim() !== "" ? successMsg : null;
+    res.locals.error = errorMsg && errorMsg.trim() !== "" ? errorMsg : null;
+  next();
+})
+
 
 app.use('/listings',listings);
 app.use('/listings/:id/reviews',reviews);
@@ -55,4 +79,10 @@ app.use((err,req,res,next)=>{
   let {statusCode=500,message="something went wrong !"}=err;
   // res.status(statusCode).send(message);
   res.status(statusCode).render("error.ejs",{message});
+});
+
+
+
+app.listen(port, () => {
+  console.log(`Server is running on http://localhost:${port}`);
 });

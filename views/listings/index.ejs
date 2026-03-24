@@ -1,7 +1,30 @@
 
 <% layout('layouts/boilerplate') %>
 <body>
+<% if (success) { %>
+    <div id="flash-msg" class="flash-msg">
+        <%= success %>
+    </div>
 
+    <script>
+        const msg = document.getElementById("flash-msg");
+
+        // show animation
+        setTimeout(() => {
+            msg.classList.add("show");
+        }, 100);
+
+        // hide after 3 sec
+        setTimeout(() => {
+            msg.classList.remove("show");
+
+            // remove from DOM
+            setTimeout(() => {
+                msg.remove();
+            }, 400);
+        }, 3000);
+    </script>
+<% } %>
     <h1>All Listings</h1>
    <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 ">
     <% listings.forEach(listing => { %>

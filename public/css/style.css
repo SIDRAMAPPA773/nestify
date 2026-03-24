@@ -195,3 +195,56 @@ body{
     background-position: 100% 0;
   }
 }
+
+
+/* 
+.flash-msg {
+    position: fixed;
+    top: 20px;
+    right: 20px;
+    padding: 12px 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+
+    opacity: 0;
+    transform: translateY(-20px);
+    transition: all 0.4s ease;
+    z-index: 9999;
+} */
+
+
+.flash-msg {
+    position: fixed;
+    top: 20px;
+    left: 50%;
+    transform: translate(-50%, -20px); /* ✅ combine both */
+
+    padding: 12px 20px;
+    border-radius: 10px;
+    color: white;
+    font-weight: 500;
+    box-shadow: 0 8px 20px rgba(0,0,0,0.2);
+
+    opacity: 0;
+    transition: all 0.4s ease;
+    z-index: 9999;
+}
+
+.flash-msg.show {
+    opacity: 1;
+    transform: translate(-50%, 0); /* ✅ keep X center */
+}
+.flash-msg.show {
+    opacity: 1;
+    transform: translateY(0);
+}
+
+.flash-msg.success {
+    background: #28a745;
+}
+
+.flash-msg.error {
+    background: #dc3545;
+}
