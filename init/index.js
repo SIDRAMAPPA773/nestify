@@ -13,7 +13,8 @@ main().catch(err => console.log(err));
 
 const initDB = async () => {
     await Listing.deleteMany({});
-    await Listing.insertMany(initdata.data);
+    const updateddata=initdata.data.map((obj)=>({...obj,owner:'69c2e1fae4629cdf61dddd69'}));
+    await Listing.insertMany(updateddata);
     console.log("Database initialized with sample data.");
     mongoose.connection.close();
 }

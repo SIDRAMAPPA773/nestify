@@ -3,32 +3,17 @@ const router = express.Router({ mergeParams: true });
 const Review=require('../models/review.js');
 const wrapAsync= require("../utils/wrapAsync.js");
 const ExpressError=require("../utils/ExpressError.js");
-const {listingSchema,reviewSchema}=require("../schema.js");
+// const {listingSchema}=require("../schema.js");
+const {validateReview, isLoggedIn, isOwner,isReviewAuthor}=require("../middleware.js");
 const Listing = require('../models/listing.js');
 
 
-const validateReview = (req, res, next) => {
-  console.log("BODY:", req.body);  
-
-  if (!req.body.review) {
-    throw new ExpressError(400, "Review is required");
-  }
-
-  const { error } = reviewSchema.validate(req.body);
-
-  if (error) {
-    console.log("JOI ERROR:", error.details); // 👈 THIS
-    const msg = error.details.map(el => el.message).join(",");
-    throw new ExpressError(400, msg);
-  }
-
-  next();
-};
 
 
 
 
-router.post('/',validateReview,wrapAsync(async (req,res)=>{
+
+router.post('/',isLoggedIn("login is required for creting Review"),validateReview,wrapAsync(async (req,res)=>{
 
 let listing=await Listing.findById(req.params.id);
 
@@ -36,7 +21,7 @@ if (!listing) {
   throw new ExpressError(404, "Listing not found");
 }
 let newReview=new Review(req.body.review);
-
+     newReview.author=req.user._id;
 
 listing.reviews.push(newReview);
  await newReview.save();
@@ -48,7 +33,7 @@ res.redirect(`/listings/${listing._id}`);
 }));
 
 // delete review route
-router.delete("/:reviewId",wrapAsync(async (req,res)=>{
+router.delete("/:reviewId",isLoggedIn("you cannot delete Review !"),isReviewAuthor,wrapAsync(async (req,res)=>{
 let {id,reviewId}=req.params;
  await Review.findByIdAndDelete(reviewId);
  await Listing.findByIdAndUpdate(id, {
