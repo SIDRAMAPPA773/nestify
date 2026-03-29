@@ -44,16 +44,37 @@ module.exports.isOwner=async (req,res,next)=>{
 };
 
 
+// module.exports.validateListing = (req, res, next) => {
+//   console.log("BODY:", req.body);   
+//   if (!req.body.listing) {
+//     throw new ExpressError(400, "Listing is required");
+//   }
+
+//   const { error } = listingSchema.validate(req.body.listing);
+
+//   if (error) {
+//     console.log("JOI ERROR:", error.details); 
+//     const msg = error.details.map(el => el.message).join(",");
+//     throw new ExpressError(400, msg);
+//   }
+
+//   next();
+// };
+
+
 module.exports.validateListing = (req, res, next) => {
-  console.log("BODY:", req.body);   
+
+  console.log("BODY:", req.body);
+
   if (!req.body.listing) {
     throw new ExpressError(400, "Listing is required");
   }
 
-  const { error } = listingSchema.validate(req.body.listing);
+  // 🔥 FIXED LINE
+  const { error } = listingSchema.validate(req.body);
 
   if (error) {
-    console.log("JOI ERROR:", error.details); 
+    console.log("JOI ERROR:", error.details);
     const msg = error.details.map(el => el.message).join(",");
     throw new ExpressError(400, msg);
   }

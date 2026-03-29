@@ -10,18 +10,21 @@
     <h3><b>Edit Listing</b> </h3>
    <div class="row mt-3">
     <div class="col-md-8 offset-md-2">
-         <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation">
+         <form method="POST" action="/listings/<%= listing._id %>?_method=PUT" novalidate class="needs-validation"  enctype="multipart/form-data">
        <div class="mb-3">
         <label for="Title"> Edit Title:</label><br/>
             <input type="text" name="listing[title]" value="<%= listing.title %>" placeholder="Title" class="form-control" required/>
           <div class="invalid-feedback"> Please valid Title</div>
         </div>
     
-       
+       <div class="mb-3 ">
+        <label for="imageurl"> Original Listing Image :</label><br/>
+           <img style="height: 200px; width: 200px;" src="<%=originalImageurl %> " />
+        </div>
        <div class="mb-3">
-        <label for="imageurl"> Edit Image URL:</label><br/>
-            <input type="text" name="listing[image][url]" value="<%= listing.image.url %>" placeholder="Image URL" class="form-control" required/>
-            <div class="invalid-feedback"> Please Provide a Valid Description</div>
+        <label for="imageurl"> Upload New Image:</label><br/>
+            <input type="file" name="image" placeholder="Image URL" class="form-control" />
+
         </div>
      
 

@@ -4,30 +4,75 @@ const Review=require('./review.js');
 const  User=require('./user.js');
 const Schema = mongoose.Schema;
 
+// const listingSchema = new Schema({
+//     title: { type: String ,required: true },
+//     description: { type: String },
+    
+//     image: {
+//         url:{
+//             type:String
+//         },
+//         filename:{
+//             type:String
+//         }
+//     },
+
+//     price: { type: Number ,default: 0 },
+//     location: { type: String, required: true },
+//     country: { type: String, required: true },
+//     reviews:[
+//         {
+//             type:Schema.Types.ObjectId,
+//             ref:"Review"
+//         },
+//     ],
+//     owner:{
+//         type:Schema.Types.ObjectId,
+//         ref:"User",
+//     },
+// });
+
 const listingSchema = new Schema({
     title: { type: String ,required: true },
     description: { type: String },
-    
+
     image: {
-        filename: { type: String, default: "default" },
-        url: { 
-            type: String,
-            default: "https://unsplash.com/photos/photo-of-brown-bench-near-swimming-pool-Koei_7yYtIo"
-        }
+        url: { type: String },
+        filename: { type: String }
     },
 
     price: { type: Number ,default: 0 },
     location: { type: String, required: true },
     country: { type: String, required: true },
-    reviews:[
+
+    
+    geometry: {
+        type: {
+            type: String,
+            enum: ['Point'],
+            required: true
+        },
+        coordinates: {
+            type: [Number], // [lng, lat]
+            required: true
+        }
+    },
+    category: {
+  type: String,
+  enum: ["Trending", "Beach", "Mountain", "City", "Camping", "Luxury", "Budget"],
+  default: "Trending"
+},
+
+    reviews: [
         {
-            type:Schema.Types.ObjectId,
-            ref:"Review"
+            type: Schema.Types.ObjectId,
+            ref: "Review"
         },
     ],
-    owner:{
-        type:Schema.Types.ObjectId,
-        ref:"User",
+
+    owner: {
+        type: Schema.Types.ObjectId,
+        ref: "User",
     },
 });
 

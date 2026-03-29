@@ -4,17 +4,53 @@
 
 const Joi = require('joi');
 
-module.exports.listingSchema = Joi.object({
-  title: Joi.string().required(),
-  description: Joi.string().required(),
-  price: Joi.number().required(),
-  location: Joi.string().required(),
-  country: Joi.string().required(),
-  image: Joi.object({
-    url: Joi.string().allow("", null),
-  })
-});
 
+
+// module.exports.listingSchema = Joi.object({
+//   listing: Joi.object({
+//     title: Joi.string().required(),
+//     description: Joi.string().required(),
+//     price: Joi.number().required(),
+//     location: Joi.string().required(),
+//     country: Joi.string().required(),
+//     image: Joi.object({
+//       url: Joi.string().allow("", null),
+//       filename: Joi.string().allow("", null)
+//     }).required()
+//   }).required()
+// });
+// module.exports.listingSchema = Joi.object({
+//   title: Joi.string().required(),
+//   description: Joi.string().required(),
+//   price: Joi.number().required(),
+//   location: Joi.string().required(),
+//   country: Joi.string().required(),
+//   coordinates: Joi.string().allow(""),
+// });
+
+module.exports. listingSchema = Joi.object({
+  listing: Joi.object({
+
+    title: Joi.string().required(),
+    description: Joi.string().required(),
+    price: Joi.number().required(),
+    location: Joi.string().required(),
+    country: Joi.string().required(),
+
+    category: Joi.string().valid(
+      "Trending",
+      "Beach",
+      "Mountain",
+      "City",
+      "Camping",
+      "Luxury",
+      "Budget"
+    ).required(),
+
+    coordinates: Joi.string().allow("")
+
+  }).required()
+});
 
 module.exports.reviewSchema=Joi.object(
   {

@@ -1,34 +1,57 @@
-<nav class="navbar navbar-expand-md navbar-light bg-light border-bottom sticky-top ">
+<nav class="navbar navbar-expand-md navbar-light bg-light border-bottom sticky-top">
   <div class="container-fluid">
-    <a class="navbar-brand" href="/"><i class="fa-solid fa-compass"></i> </a>
 
+    <!-- 🔥 LEFT: LOGO -->
+    <a class="navbar-brand" href="/listings">
+      <i class="fa-solid fa-compass"></i>
+    </a>
+
+    <!-- 🔥 MOBILE BUTTON -->
     <button class="navbar-toggler"
-     type="button" 
-     data-bs-toggle="collapse"
-     data-bs-target="#navbarNavAltMarkup" 
-     aria-controls="navbarNavAltMarkup" 
-     aria-expanded="false"
-     aria-label="Toggle navigation">
+      type="button"
+      data-bs-toggle="collapse"
+      data-bs-target="#navbarNavAltMarkup">
       <span class="navbar-toggler-icon"></span>
     </button>
 
     <div class="collapse navbar-collapse" id="navbarNavAltMarkup">
+
+      <!-- 🔥 LEFT LINKS -->
       <div class="navbar-nav">
-        <a class="nav-link active" href="/">Home</a>
-        <a class="nav-link" href="/listings">All listings</a>
-        <a class="nav-link" href="/listings/new">ADD New listings</a>
+        <a class="nav-link" href="/listings">Explore</a>
       </div>
 
-       <div class="navbar-nav ms-auto">
+      <!-- 🔥 CENTER SEARCH (IMPORTANT FIX) -->
+      <form class="nav-search mx-auto" action="/listings" method="GET">
+
+        <input 
+          type="text" 
+          name="location" 
+          placeholder="&#128205; Search destinations"
+        >
+
+        <button type="submit">&#128269;</button>
+
+      </form>
+
+      <!-- 🔥 RIGHT SIDE -->
+      <div class="navbar-nav ms-auto align-items-center">
+
+        <a class="nav-link fw-semibold" href="/listings/new">
+          List Your Place
+        </a>
+
         <% if(!currentUser) { %>
-            <a class="nav-link active" href="/signup">SignUp</a>
-        <a class="nav-link" href="/login">Login</a>
+          <a class="nav-link" href="/signup"><b>Sign Up</b></a>
+          <a class="nav-link" href="/login"><b>Login</b></a>
         <% } %>
-       <% if(currentUser) { %>
-       <a class="nav-link" href="/logout">logout</a>
+
+        <% if(currentUser) { %>
+          <a class="nav-link" href="/logout"><b>Logout</b></a>
         <% } %>
-        
+
       </div>
+
     </div>
   </div>
 </nav>

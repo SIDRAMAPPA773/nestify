@@ -1,52 +1,141 @@
-
 <% layout('layouts/boilerplate') %>
-<body>
-<% if (success) { %>
+
+<div class="container">
+
+  
+
+  <!-- ⚡ FLASH MESSAGE -->
+  <% if (success) { %>
     <div id="flash-msg" class="flash-msg">
-        <%= success %>
+      <%= success %>
     </div>
 
     <script>
-        const msg = document.getElementById("flash-msg");
+      const msg = document.getElementById("flash-msg");
 
-        // show animation
-        setTimeout(() => {
-            msg.classList.add("show");
-        }, 100);
+      setTimeout(() => msg.classList.add("show"), 100);
 
-        // hide after 3 sec
-        setTimeout(() => {
-            msg.classList.remove("show");
-
-            // remove from DOM
-            setTimeout(() => {
-                msg.remove();
-            }, 400);
-        }, 3000);
+      setTimeout(() => {
+        msg.classList.remove("show");
+        setTimeout(() => msg.remove(), 400);
+      }, 3000);
     </script>
-<% } %>
-    <h1>All Listings</h1>
-   <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 ">
+  <% } %>
+
+  <!-- FILTERS -->
+ <div class="filters-wrapper">
+  <div class="filter-chip active" data-category="all">
+  &#128293; All
+</div>
+
+ 
+
+  <div class="filter-chip" data-category="Beach">
+    &#127965;&#65039; Beach
+  </div>
+
+  <div class="filter-chip" data-category="Mountain">
+    &#127956;&#65039; Mountain
+  </div>
+
+  <div class="filter-chip" data-category="City">
+    &#127961;&#65039; City
+  </div>
+
+  <div class="filter-chip" data-category="Camping">
+    &#127957;&#65039; Camping
+  </div>
+
+  <div class="filter-chip" data-category="Luxury">
+    &#128142; Luxury
+  </div>
+
+  <div class="filter-chip" data-category="Budget">
+    &#128176; Budget
+  </div>
+  
+
+  <div class="tax-toggle">
+
+  <span class="toggle-label">&#128176; Prices</span>
+
+  <label class="switch">
+    <input type="checkbox" id="switchCheckDefault">
+    <span class="slider"></span>
+  </label>
+
+  <span class="toggle-state">+ GST</span>
+
+</div>
+
+</div>
+
+  <!-- 🏠 LISTINGS -->
+  <h4 class="section-title">Explore Stays</h4>
+
+  <div class="row row-cols-lg-3 row-cols-md-2 row-cols-sm-1 g-4">
+
     <% listings.forEach(listing => { %>
-        <a href="/listings/<%= listing._id %>" class="listing-link" style="text-decoration: none; color: inherit;">
 
-            <div class="card col listing-card" >
+      <div class="col">
+        <a href="/listings/<%= listing._id %>" class="listing-link">
 
+         <div class="listing-card"
+     data-price="<%= listing.price %>"
+     data-category="<%= listing.category %>">
 
-          <img src="<%= listing.image.url %>" class="card-img-top" alt="Listing_image" style="height:20rem  ;">
-         
-         <div class="card-img-overlay">Welcome to <%= listing.title %></div> 
-         <div class="card-body">
-          <p class="card-text"> <b><%=listing.title %></b> <br> Price: &#8377; <%= (listing.price || 0).toLocaleString('en-IN') %>/night
+            <!-- IMAGE -->
+            <div class="listing-img-wrapper">
+              <img src="<%= listing.image.url %>" alt="Listing Image">
+            </div>
+
+            <!-- CONTENT -->
+            <div class="listing-content">
+
+              <h5 class="listing-title"><%= listing.title %></h5>
+
+              <p class="listing-location">
+                &#128205; <%= listing.location %>
+              </p>
+
+              <p class="listing-price">
+  ₹ 
+  <span class="price-value">
+    <%= (listing.price || 0).toLocaleString('en-IN') %>
+  </span>
+
+  <span>/ night</span>
+
+  <i class="tax-label">&nbsp;&nbsp;+18% GST</i>
 </p>
-          
-         </div>
-    </div>
+                
+            </div>
+
+          </div>
+
         </a>
+      </div>
 
-    
+    <% }) %>
 
-        <% }) %>
-   </div>
-    
-</body>
+  </div>
+
+  <!-- 🗺️ MAP -->
+  <div class="map-section">
+
+    <h4 class="section-title">🗺️ Explore on Map</h4>
+
+    <div id="map"></div>
+
+  </div>
+
+</div>
+
+<!-- 🔥 PASS DATA -->
+<script>
+  window.listings = <%- JSON.stringify(listings) %>;
+</script>
+
+<!-- 🔥 SCRIPTS -->
+<script src="/js/indexMap.js"></script>
+<script src="/js/filter.js"></script>
