@@ -1,0 +1,11 @@
+mongodb+srv://sidramhalannavar7_db_user:<db_password>@cluster0.st0h2ks.mongodb.net/?appName=Cluster0
+
+mongodb+srv://sidramhalannavar7_db_user:halannavar@321@cluster0.st0h2ks.mongodb.net/?appName=Cluster0
+
+
+
+
+
+mongodb+srv://sidram:sig0lZfii3hxbK91@cluster1.d3x0trc.mongodb.net/?appName=cluster1
+mongodb+srv://sidram:<db_password>@cluster1.d3x0trc.mongodb.net/?appName=cluster1
+'mongodb://localhost:27017/wanderlustDB'

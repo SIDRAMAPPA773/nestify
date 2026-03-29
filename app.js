@@ -19,6 +19,8 @@ const ejsMate = require("ejs-mate");
 const ExpressError=require("./utils/ExpressError.js")
 // const {listingSchema,reviewSchema}=require("./schema.js");
 const session=require("express-session");
+const MongoStore = require('connect-mongo').default;
+
 const flash=require('connect-flash');
 
 
@@ -39,19 +41,32 @@ const passport=require("passport");
 const LocalStrategy=require("passport-local");
 const User=require('./models/user.js');
 
+const dburl=process.env.ATLASDB_URL;
 
 main().then(() => console.log('Connected to MongoDB')
 ).catch(err => console.log(err));
 
 async function main() {
-  await mongoose.connect('mongodb://localhost:27017/wanderlustDB');
+  await mongoose.connect(dburl);
 }
 
 
 // main().catch(err => console.log(err));
+const store= MongoStore.create({
+  mongoUrl:dburl,
+  crypto:{
+    secret:process.env.SECRET,
+  },
+touchAfter:24*60*60,
+});
+
+store.on("error",(err)=>{
+  console.log("ERROR IN MONGO SESSION STORE",err);
+});
 
 const sessionOptions={
-  secret:"mysupersecretcode",
+  store,
+  secret:process.env.SECRET,
   resave:false,
   saveUninitialized:true,
   cookie:{
@@ -62,9 +77,11 @@ const sessionOptions={
 };
 
 
-// app.get('/', (req, res) => {
-//   res.send('Hi I am ROOT');
-// });
+
+
+app.get('/', (req, res) => {
+  res.redirect('/listings');
+});
 
 app.use(session(sessionOptions));
 app.use(flash());
