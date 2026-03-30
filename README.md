@@ -33,16 +33,7 @@ A full-stack web application that allows users to explore, create, and manage tr
 
 ---
 
-## 📸 Screenshots
 
-### 🏠 Home Page
-(Add your screenshot here)
-
-### 📍 Map View
-(Add screenshot)
-
-### ⭐ Listing Details
-(Add screenshot)
 
 ---
 
