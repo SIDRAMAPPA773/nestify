@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const map = new maplibregl.Map({
     container: 'map',
-    style: "https://tiles.stadiamaps.com/styles/alidade_smooth.json",
+     style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json",
     zoom: 2
   });
 

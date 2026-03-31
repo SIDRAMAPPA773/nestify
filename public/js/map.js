@@ -16,7 +16,7 @@ document.addEventListener("DOMContentLoaded", function () {
 
   const map = new maplibregl.Map({
     container: 'map',
-    style: "https://demotiles.maplibre.org/style.json", // ✅ FIXED
+    style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json", // ✅ FIXED
     center: coordinates,
     zoom: 13
   });
