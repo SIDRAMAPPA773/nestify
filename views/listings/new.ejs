@@ -1,106 +1,22 @@
-<!-- <!DOCTYPE html>
-<html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>New List</title>
-</head> -->
-<% layout('layouts/boilerplate') %>
-
-<body>
-    <br>
-    <h3 style="text-align: center;"> <b>Create new List</b></h3>
-
-    <div class="row">
-    <div class="col-md-8 offset-md-2">
-
-        <form method="POST" action="/listings" novalidate class="needs-validation" enctype="multipart/form-data">
-
-       <div class="mb-3">
-         <label for="Title" class="form-label">Title:</label><br/>
-        <input type="text" name="listing[title]" placeholder="Add catchy Title" class="form-control" required/>
-
-        <div class="valid-feedback"> Title Looks Good!! </div>
-        <div class="invalid-feedback"> Please enter a valid title </div>
-       </div>
-     <div class="mb-3">
-  <label class="form-label">Category</label>
-
-  <select name="listing[category]" class="form-control">
-
-    
-    <option value="Beach">Beach</option>
-    <option value="Mountain">Mountain</option>
-    <option value="City">City</option>
-    <option value="Camping">Camping</option>
-    <option value="Luxury">Luxury</option>
-    <option value="Budget">Budget</option>
-
-  </select>
-</div>
-      
-     
-    
-    <div class="mb-3">
-          <label for="Image URL" class="form-label"> Upload Listing Image :</label><br/>
-        <input type="file" name="image" class="form-control" required/>
-    </div>
-   
-    <div class="mb-3">
-        <label for="Description" class="form-label">Description:</label><br/>
-        <textarea name="listing[description]" placeholder="Description" class="form-control" required></textarea>
-       <div class="invalid-feedback"> Please provide a description</div>
-    </div>
-   
-    <div class="row">
-        <div class="mb-3 col-md-4">
-        <label for="Price" class="form-label">Price:</label><br/>
-        <input type="number" name="listing[price]" placeholder="1200" class="form-control" required />
-        <div class= "invalid-feedback">Please enter a valid price </div>
-    </div>
-    <div class="mb-3 col-md-8">
-        <label for="Country" class="form-label">Country:</label><br/>
-       <input type="text" name="listing[country]" placeholder="india" class="form-control" required/>
-
-       <div class= "invalid-feedback"> Enter a valid country name </div>
-    </div>
-    </div>
-    <div class="mb-3">
-         <label for="Location" class="form-label">Location:</label><br/>
-        <input type="text" id="locationInput" name="listing[location]" placeholder="Bengaluru,Hyderabad etc" class="form-control"required/>
-     <div class= "invalid-feedback"> Enter a valid location </div>  
-    </div>
-    
-    <div id="map"></div>
-    <input type="hidden" name="listing[coordinates]" id="coordinates">
-      <br>
-   
-        <button type="submit" class="btn btn-dark add-btn">Create Listing</button>
-    </form>
-    </div>
-    </div>
-
-
 <script>
 document.addEventListener("DOMContentLoaded", function () {
 
   const map = new maplibregl.Map({
     container: 'map',
-    style: "https://tiles.stadiamaps.com/styles/alidade_smooth.json",
+    style: "https://basemaps.cartocdn.com/gl/positron-gl-style/style.json", // ✅ FIXED
     center: [77.5946, 12.9716],
     zoom: 5
   });
 
   map.addControl(new maplibregl.NavigationControl());
 
-  let marker = new maplibregl.Marker()
+  let marker = new maplibregl.Marker({ color: "#ff5a5f" })
     .setLngLat([77.5946, 12.9716])
     .addTo(map);
 
   map.on('click', async (e) => {
     const { lng, lat } = e.lngLat;
 
-    // Move marker
     marker.setLngLat([lng, lat]);
 
     // Save coordinates
@@ -126,8 +42,3 @@ document.addEventListener("DOMContentLoaded", function () {
 
 });
 </script>
-
-
-
-</body>
-<!-- </html> -->
